@@ -11,7 +11,6 @@ namespace Library_Management_System
         static void Main(string[] args)
         {
             Library_Management_System_class LogicofMyProgram = new Library_Management_System_class();
-            LogicofMyProgram.addingBooksToLibrary();
             while (true)
             {
                 Console.WriteLine("Choose an option:");
@@ -27,11 +26,10 @@ namespace Library_Management_System
                 switch (choice)
                 {
                     case "1":
-                        addingBooksToLibrary();
+                        LogicofMyProgram.addingBooksToLibrary();
                         break;
                     case "2":
-                        // Add logic for Viewing Books
-                        Console.WriteLine("You have chosen to View Books.");
+                        LogicofMyProgram.ViewingBooksinLibrary();
                         break;
                     case "3":
                         // Add logic for Searching Books
@@ -49,7 +47,8 @@ namespace Library_Management_System
                         Console.WriteLine("Invalid choice. Please choose a number between 1 and 5.");
                         break;
                 }
-                Console.ReadLine();
+                Console.WriteLine("\n------------------------------------ ");
+
             }
         }
     }
