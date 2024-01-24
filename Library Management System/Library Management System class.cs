@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -95,6 +96,75 @@ namespace Library_Management_System
                 Console.WriteLine(); // For better readability
             }
         }
+        public void SearchingBooks()
+        {
+            Console.Write(" enter title, author, or ID of the book you want to find: ");
+            string SearchKeyWord = Console.ReadLine();
+            string[] TheBookAfterFindIT = LinearSearchhToFindBook(SearchKeyWord);
+            PrintTheSearchResult(TheBookAfterFindIT);
+
+        }
+        public string[] LinearSearchhToFindBook(string SearchKeyWord) // i can't use the binary search because the array that i stor the value on it it is not sorted and very small 
+        {
+            string[] BookSearchResult = new string[5];
+
+            foreach (KeyValuePair<int, string[]> entry in allOfTheBooksInLibrary)
+            {
+                foreach (string value in entry.Value)
+                {
+                    if (SearchKeyWord == value)
+                    {
+                        BookSearchResult = new string[entry.Value.Length];
+                        Array.Copy(entry.Value, BookSearchResult, entry.Value.Length);
+                        break;
+                    }
+                    else if (SearchKeyWord != value)
+                    {
+                        BookSearchResult[entry.Key] = null;
+                    }
+
+                }
+                break;
+            }
+            return BookSearchResult;
+        }
+        public void PrintTheSearchResult(string[] TheBookAfterFindIT)
+        {
+            for (int i = 0; i < SizeOfTheBookInfoArray; i++)
+            {
+                {
+                    if (TheBookAfterFindIT[i] != null)
+                    {
+                        if (i == 0)
+                        {
+                            Console.WriteLine($"ID:{TheBookAfterFindIT[0]} ");
+                            continue;
+                        }
+                        if (i != 0 && i <= SizeOfTheBookInfoArray)
+                        {
+                            Console.Write($"{bookAttributesName[i - 1]}:");
+                            Console.WriteLine(TheBookAfterFindIT[i]);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("this  book is not in the library");
+                        break;
+                    }
+                }
+
+            }
+
+        }
+        public void BorrowingBooks()
+        {
+
+        }
+        public void ReturningBooks()
+        {
+
+        }
+
     }
 
 

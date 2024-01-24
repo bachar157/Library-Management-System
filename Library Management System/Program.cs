@@ -32,8 +32,7 @@ namespace Library_Management_System
                         LogicofMyProgram.ViewingBooksinLibrary();
                         break;
                     case "3":
-                        // Add logic for Searching Books
-                        Console.WriteLine("You have chosen to Search for Books.");
+                        LogicofMyProgram.SearchingBooks();
                         break;
                     case "4":
                         // Add logic for Borrowing Books
