@@ -56,8 +56,15 @@ namespace Library_Management_System
             {
                 for (int i = 1; i < everySingleBookInfo.Length; i++)
                 {
-                    Console.Write($"{bookAttributesName[i - 1]}: ");
-                    everySingleBookInfo[i] = Console.ReadLine();
+                    if (bookAttributesName[i - 1] == "publication year")
+                    {
+                        everySingleBookInfo[i] = ReadAndValidatePublicationYear();
+                    }
+                    else
+                    {
+                        Console.Write($"{bookAttributesName[i - 1]}: ");
+                        everySingleBookInfo[i] = Console.ReadLine();
+                    }
                 }
                 IsAvailable = true;
                 allOfTheBooksInLibrary[booksNumber] = (everySingleBookInfo, IsAvailable);
@@ -67,7 +74,27 @@ namespace Library_Management_System
                 Console.WriteLine($"An error occurred while reading input: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Validate Publication Year and make sure it is a number 
+        /// </summary>
+        /// <returns></returns>
+        public string ReadAndValidatePublicationYear()
+        {
+            while (true)
+            {
+                Console.Write("publication year: ");
+                string input = Console.ReadLine();
 
+                if (int.TryParse(input, out int year))
+                {
+                    return input;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a valid publication year.");
+                }
+            }
+        }
         /// <summary>
         /// Provides options to view all books or books by genre
         /// </summary>
