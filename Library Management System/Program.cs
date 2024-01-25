@@ -29,18 +29,16 @@ namespace Library_Management_System
                         LogicofMyProgram.addingBooksToLibrary();
                         break;
                     case "2":
-                        LogicofMyProgram.ViewingBooksinLibrary();
+                        LogicofMyProgram.ViewBooks();
                         break;
                     case "3":
                         LogicofMyProgram.SearchingBooks();
                         break;
                     case "4":
-                        // Add logic for Borrowing Books
-                        Console.WriteLine("You have chosen to Borrow Books.");
+                        LogicofMyProgram.BorrowingBooks();
                         break;
                     case "5":
-                        // Add logic for Returning Books
-                        Console.WriteLine("You have chosen to Return Books.");
+                        LogicofMyProgram.ReturningBooks();
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please choose a number between 1 and 5.");
