@@ -10,105 +10,74 @@ namespace Library_Management_System
 {
     internal class Library_Management_System_class
     {
-        Dictionary<int, (string[], bool)> allOfTheBooksInLibrary = new Dictionary<int, (string[], bool)>();
-        bool IsAvailable = false;
-        string[] bookAttributesName = { "title", "author", "publication year", "genre" };
-        int booksNumber = 0;
+        Dictionary<int, string[]> allOfTheBooksInLibrary = new Dictionary<int, string[]>();
+        string[] bookAttributesName = new string[] // this arry to dispaly the book info with no need to writhe all of them in console and do it manwal every time 
+        {
+            "title",
+            "author",
+            "publication year",
+            "genre",
+        };
+        HashSet<int> generatedID;
+        int booksNumber = 0; // in each time i wanty to add book the number will be increce ++;
         int SizeOfTheBookInfoArray = 5;
 
-        /// <summary>
-        /// Adds a new book to the library
-        /// </summary>
+
+
         public void addingBooksToLibrary()
         {
-            Console.WriteLine("Adding book to the library");
-            try
-            {
-                readingAndSaveTheUserInput();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
+            Console.WriteLine(" adding book to the libriry ");
+            readingAndSaveTheUserINput();
 
-        /// <summary>
-        /// Generates a random ID for a new book
-        /// </summary>
-        /// <returns></returns>
+        }
         public int generatRandomID()
         {
             Random random = new Random();
-            return random.Next(1000, 10000);
-        }
+            int randomNumber = random.Next(1000, 10000);
+            return randomNumber;
 
-        /// <summary>
-        /// Reads user input for new book details and saves it
-        /// </summary>
-        public void readingAndSaveTheUserInput()
+        }
+        public void readingAndSaveTheUserINput()
         {
             string[] everySingleBookInfo = new string[5];
             booksNumber++;
-            everySingleBookInfo[0] = Convert.ToString(generatRandomID());
-            Console.WriteLine($"Your new book ID is: {everySingleBookInfo[0]}");
 
+
+            //to create new arry and add it to the Dictionary and save it asd like a seapert block 
+
+            everySingleBookInfo[0] = Convert.ToString(generatRandomID());
+            // to add the ID for the array everySingleBookInfo whoch is will help me in future to find this book
+
+            Console.WriteLine($" Your new book ID is :{everySingleBookInfo[0]} ");
+            // generat Random ID for each  becuse  i want to use Dictionary key to count the books not as like a ID
             try
             {
                 for (int i = 1; i < everySingleBookInfo.Length; i++)
                 {
                     Console.Write($"{bookAttributesName[i - 1]}: ");
                     everySingleBookInfo[i] = Console.ReadLine();
+
                 }
-                IsAvailable = true;
-                allOfTheBooksInLibrary[booksNumber] = (everySingleBookInfo, IsAvailable);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"An error occurred while reading input: {ex.Message}");
+                throw;
             }
+            allOfTheBooksInLibrary[booksNumber] = everySingleBookInfo;
+            //  add each arry to the main contaier with is allOfTheBooksInLibrary Dictionary
+            // so here every book will be in  a speate block  and all of them in the same Dictionary
+            // Dictionary key value is number from 1 to ...  which is not same with ID
+
         }
 
-        /// <summary>
-        /// Provides options to view all books or books by genre
-        /// </summary>
-        public void ViewBooks()
+        public void ViewingBooksinLibrary()
         {
-            Console.WriteLine("Choose an option:\n1. View All Books\n2. View Books By Genre");
-            string option = Console.ReadLine();
 
-            try
-            {
-                if (option == "1")
-                {
-                    ViewingAllBooksinLibrary();
-                }
-                else if (option == "2")
-                {
-                    DisplayBooksByGenre();
-                }
-                else
-                {
-                    Console.WriteLine("Invalid option. Please choose 1 or 2.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Displays all books in the library
-        /// </summary>
-        public void ViewingAllBooksinLibrary()
-        {
-            foreach (var entry in allOfTheBooksInLibrary)
+            foreach (KeyValuePair<int, string[]> entry in allOfTheBooksInLibrary)
             {
                 int index = 0;
                 Console.WriteLine($"BOOK NUMBER : {entry.Key}");
-                string[] bookInfo = entry.Value.Item1;
-                bool isBookAvailable = entry.Value.Item2;
-                foreach (string value in bookInfo)
+                foreach (string value in entry.Value)
                 {
                     if (index == 0)
                     {
@@ -116,6 +85,7 @@ namespace Library_Management_System
                         index++;
                         continue;
                     }
+
                     if (index != 0 && index < SizeOfTheBookInfoArray)
                     {
                         Console.Write($"{bookAttributesName[index - 1]}:");
@@ -123,183 +93,81 @@ namespace Library_Management_System
                     }
                     index++;
                 }
-                string availabilityText = isBookAvailable ? "Available" : "Not Available";
-                Console.WriteLine($"Availability: {availabilityText}");
-                Console.WriteLine();
+                Console.WriteLine(); // For better readability
             }
         }
-
-        /// <summary>
-        /// Displays books filtered by a specified genre
-        /// </summary>
-        public void DisplayBooksByGenre()
-        {
-            Console.WriteLine("Enter the genre:");
-            string genre = Console.ReadLine().ToLower();
-
-            try
-            {
-                bool found = false;
-                foreach (var entry in allOfTheBooksInLibrary)
-                {
-                    string[] bookInfo = entry.Value.Item1;
-                    if (bookInfo.Length >= 4 && bookInfo[3].ToLower() == genre)
-                    {
-                        PrintBookDetails(bookInfo, entry.Value.Item2);
-                        found = true;
-                    }
-                }
-
-                if (!found)
-                {
-                    Console.WriteLine($"No books found in the '{genre}' genre.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while displaying books: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Prints details of a book
-        /// </summary>
-        /// <param name="bookInfo"></param>
-        /// <param name="isAvailable"></param>
-        public void PrintBookDetails(string[] bookInfo, bool isAvailable)
-        {
-            for (int i = 0; i < bookInfo.Length; i++)
-            {
-                if (i < bookAttributesName.Length)
-                {
-                    Console.WriteLine($"{bookAttributesName[i]}: {bookInfo[i]}");
-                }
-            }
-            Console.WriteLine($"Availability: {(isAvailable ? "Available" : "Not Available")}");
-            Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Allows searching for books by title, author, or ID
-        /// </summary>
         public void SearchingBooks()
         {
-            Console.Write("Enter title, author, or ID of the book you want to find: ");
+            Console.Write(" enter title, author, or ID of the book you want to find: ");
             string SearchKeyWord = Console.ReadLine();
-            string[] TheBookAfterFindIT = LinearSearchToFindBook(SearchKeyWord);
+            string[] TheBookAfterFindIT = LinearSearchhToFindBook(SearchKeyWord);
             PrintTheSearchResult(TheBookAfterFindIT);
+
         }
-
-        /// <summary>
-        /// Linear search for a book in the library
-        /// </summary>
-        /// <param name="SearchKeyWord"></param>
-        /// <returns></returns>
-        public string[] LinearSearchToFindBook(string SearchKeyWord)
+        public string[] LinearSearchhToFindBook(string SearchKeyWord) // i can't use the binary search because the array that i stor the value on it it is not sorted and very small 
         {
-            string[] BookSearchResult = null;
+            string[] BookSearchResult = new string[5];
 
-            foreach (KeyValuePair<int, (string[], bool)> entry in allOfTheBooksInLibrary)
+            foreach (KeyValuePair<int, string[]> entry in allOfTheBooksInLibrary)
             {
-                string[] bookInfo = entry.Value.Item1;
-
-                foreach (string value in bookInfo)
+                foreach (string value in entry.Value)
                 {
                     if (SearchKeyWord == value)
                     {
-                        BookSearchResult = new string[bookInfo.Length + 1];
-                        Array.Copy(bookInfo, BookSearchResult, bookInfo.Length);
-                        BookSearchResult = BookSearchResult.Append(entry.Value.Item2 ? "Available" : "Not Available").ToArray();
+                        BookSearchResult = new string[entry.Value.Length];
+                        Array.Copy(entry.Value, BookSearchResult, entry.Value.Length);
+                        break;
+                    }
+                    else if (SearchKeyWord != value)
+                    {
+                        BookSearchResult[entry.Key] = null;
+                    }
+
+                }
+                break;
+            }
+            return BookSearchResult;
+        }
+        public void PrintTheSearchResult(string[] TheBookAfterFindIT)
+        {
+            for (int i = 0; i < SizeOfTheBookInfoArray; i++)
+            {
+                {
+                    if (TheBookAfterFindIT[i] != null)
+                    {
+                        if (i == 0)
+                        {
+                            Console.WriteLine($"ID:{TheBookAfterFindIT[0]} ");
+                            continue;
+                        }
+                        if (i != 0 && i <= SizeOfTheBookInfoArray)
+                        {
+                            Console.Write($"{bookAttributesName[i - 1]}:");
+                            Console.WriteLine(TheBookAfterFindIT[i]);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("this  book is not in the library");
                         break;
                     }
                 }
 
-                if (BookSearchResult != null)
-                {
-                    break;
-                }
-            }
-            return BookSearchResult;
-        }
-        
-        /// <summary>
-        /// Prints the result of a book search
-        /// </summary>
-        /// <param name="TheBookAfterFindIT"></param>
-        public void PrintTheSearchResult(string[] TheBookAfterFindIT)
-        {
-            if (TheBookAfterFindIT == null || TheBookAfterFindIT.Length == 0)
-            {
-                Console.WriteLine("Book not found in the library.");
-                return;
             }
 
-            for (int i = 0; i < TheBookAfterFindIT.Length - 1; i++)
-            {
-                if (i == 0)
-                {
-                    Console.WriteLine($"ID: {TheBookAfterFindIT[i]}");
-                }
-                else if (i - 1 < bookAttributesName.Length)
-                {
-                    Console.WriteLine($"{bookAttributesName[i - 1]}: {TheBookAfterFindIT[i]}");
-                }
-            }
-            Console.WriteLine($"Availability: {TheBookAfterFindIT[TheBookAfterFindIT.Length - 1]}");
         }
-
-        /// <summary>
-        /// Allows a user to borrow a book from the library
-        /// </summary>
         public void BorrowingBooks()
         {
-            Console.Write("Enter the ID or name of the book you want to borrow: ");
-            string bookInfo = Console.ReadLine();
 
-            try
-            {
-                foreach (var entry in allOfTheBooksInLibrary)
-                {
-                    if ((entry.Value.Item1[0] == bookInfo || entry.Value.Item1[1] == bookInfo) && entry.Value.Item2)
-                    {
-                        allOfTheBooksInLibrary[entry.Key] = (entry.Value.Item1, false);
-                        Console.WriteLine($"Book '{entry.Value.Item1[1]}' with ID '{entry.Value.Item1[0]}' borrowed successfully.");
-                        return;
-                    }
-                }
-                Console.WriteLine("Book not found or is not available.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while borrowing the book: {ex.Message}");
-            }
         }
-
-        /// <summary>
-        /// Allows a user to return a book to the library
-        /// </summary>
         public void ReturningBooks()
         {
-            Console.Write("Enter the ID or name of the book you want to return: ");
-            string bookInfo = Console.ReadLine();
 
-            try
-            {
-                foreach (var entry in allOfTheBooksInLibrary)
-                {
-                    if ((entry.Value.Item1[0] == bookInfo || entry.Value.Item1[1] == bookInfo) && !entry.Value.Item2)
-                    {
-                        allOfTheBooksInLibrary[entry.Key] = (entry.Value.Item1, true);
-                        Console.WriteLine($"Book '{entry.Value.Item1[1]}' with ID '{entry.Value.Item1[0]}' returned successfully.");
-                        return;
-                    }
-                }
-                Console.WriteLine("Book not found or was not borrowed.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while returning the book: {ex.Message}");
-            }
         }
+
     }
+
+
+
+
 }
